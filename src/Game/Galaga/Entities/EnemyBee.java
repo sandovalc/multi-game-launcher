@@ -7,6 +7,7 @@ import Resources.Images;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+
 public class EnemyBee extends BaseEntity {
     int row,col;//row 3-4, col 0-7
     boolean justSpawned=true,attacking=false, positioned=false,hit=false,centered = false;
@@ -174,6 +175,10 @@ public class EnemyBee extends BaseEntity {
             hit=true;
             handler.getMusicHandler().playEffect("explosion.wav");
             damageSource.remove = true;
+            handler.getScoreManager().addGalagaCurrentScore(100);
+            handler.getScoreManager().setGalagaCurrentScore(handler.getScoreManager().getGalagaCurrentScore());
+            handler.getScoreManager().setGalagaHighScore(handler.getScoreManager().getGalagaCurrentScore());	
         }
+        
     }
 }

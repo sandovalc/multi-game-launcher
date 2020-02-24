@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
  */
 public class PlayerShip extends BaseEntity{
 
-    private int health = 3,attackCooldown = 30,speed =6,destroyedCoolDown = 60*7;
+    private int health = 3,DummyH = 0,attackCooldown = 30,speed =6,destroyedCoolDown = 60*7;
     private boolean attacking = false, destroyed = false;
     private Animation deathAnimation;
 
@@ -59,6 +59,8 @@ public class PlayerShip extends BaseEntity{
             if (handler.getKeyManager().right) {
                 x += (speed);
             }
+            if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_N) && handler.DEBUG) 
+            	damage(null);
 
             bounds.x = x;
         }
@@ -88,10 +90,18 @@ public class PlayerShip extends BaseEntity{
         handler.getMusicHandler().playEffect("explosion.wav");
 
         bounds.x = -10;
+        
+       
     }
 
     public int getHealth() {
-        return health;
+    	if (health < 1)
+    		handler.getScoreManager().removeGalagaCurrentScore(handler.getScoreManager().getGalagaCurrentScore()+100);
+    	if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_L) && handler.DEBUG)
+        	if (health < 3)
+        		health = health - (health-1);
+        	return health;
+    
     }
 
     public void setHealth(int health) {

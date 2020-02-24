@@ -25,7 +25,7 @@ public class Handler {
     private MusicHandler musicHandler;
     private ArrayList<Clip> effects;
     private State lastState;
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public Handler(GameSetUp game){
         this.game = game;

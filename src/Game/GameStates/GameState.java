@@ -47,6 +47,8 @@ public class GameState extends State {
                 handler.getMouseManager().setUimanager(null);
                 handler.getMusicHandler().triggerGalaga();
                 State.setState(handler.getGalagaState());
+                handler.changeState(handler.getGalagaState());
+                
             }
         }));
     }

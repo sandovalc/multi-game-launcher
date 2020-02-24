@@ -169,7 +169,7 @@ public class GameSetUp implements Runnable {
     private void render(){
         BufferStrategy bs = display.getCanvas().getBufferStrategy();
         if(bs == null){
-            display.getCanvas().createBufferStrategy(3);
+            display.getCanvas().createBufferStrategy(3); 
             return;
         }
         Graphics g = bs.getDrawGraphics();
