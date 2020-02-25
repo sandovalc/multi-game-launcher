@@ -31,7 +31,7 @@ public class EnemyBee extends BaseEntity {
     }
 
     private void spawn() {
-        spawnPos = random.nextInt(4);
+        spawnPos = random.nextInt(3);
         switch (spawnPos){
             case 0://left
                 x = (handler.getWidth()/4)-width;
