@@ -31,7 +31,7 @@ public class EnemyBee extends BaseEntity {
     }
 
     private void spawn() {
-        spawnPos = random.nextInt(4);
+        spawnPos = random.nextInt(3);
         switch (spawnPos){
             case 0://left
                 x = (handler.getWidth()/4)-width;
@@ -146,9 +146,9 @@ public class EnemyBee extends BaseEntity {
                     damage(new PlayerLaser(0,0,0,0,Images.galagaPlayerLaser,handler,handler.getGalagaState().entityManager));
                 }
             }
-        }else if (positioned){
+        }else if (positioned){//random cooldown above y cuando pase, grab position and move towards it.
 
-        }else if (attacking){
+        }else if (attacking){//attack towards player and then dies
 
         }
         bounds.x=x;

@@ -22,7 +22,7 @@ public class GalagaState extends State {
 	public int selectPlayers = 1;
 	public int startCooldown = 60*7;//seven seconds for the music to finish
 	public int tickcounter = 0;
-	public int timetodosomething = 0;
+	public int spawnTime = 0;
 
 	public GalagaState(Handler handler){
 		super(handler);
@@ -37,13 +37,13 @@ public class GalagaState extends State {
 		
 		tickcounter++;
 		if(tickcounter > 60*2){
-			timetodosomething++;
+			spawnTime++;
 			tickcounter=0;
 		}
-		if(timetodosomething >= 1) {
+		if(spawnTime >= 1) {
 			Random random = new Random();
 			handler.getGalagaState().entityManager.entities.add(new EnemyBee(0, 0, 32, 32, handler, random.nextInt(8), random.nextInt(6)));
-			timetodosomething = 0;
+			spawnTime = 0;
 		}
 		
 		if (Mode.equals("Stage")){
@@ -126,6 +126,12 @@ public class GalagaState extends State {
 			g.drawString("SCORE",handler.getWidth()-handler.getWidth()/4+handler.getWidth()/48,handler.getHeight()/8);
 			g.setColor(Color.WHITE);
 			g.drawString(String.valueOf(handler.getScoreManager().getGalagaHighScore()),handler.getWidth()-handler.getWidth()/4+handler.getWidth()/48,handler.getHeight()/5);
+			
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 32));
+			g.setColor(Color.WHITE);
+			g.drawString("HIGH-SCORE:",handler.getWidth()/2-handler.getWidth()/18,32);
+			g.drawString(String.valueOf(handler.getScoreManager().getGalagaHighScore()),handler.getWidth()/2-32,64);
+			
 			for (int i = 0; i< entityManager.playerShip.getHealth();i++) {
 				g.drawImage(Images.galagaPlayer[0], (handler.getWidth() - handler.getWidth() / 4 + handler.getWidth() / 48) + ((entityManager.playerShip.width*2)*i), handler.getHeight()-handler.getHeight()/4, handler.getWidth() / 18, handler.getHeight() / 18, null);
 			}

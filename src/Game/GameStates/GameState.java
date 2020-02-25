@@ -33,6 +33,7 @@ public class GameState extends State {
     public void render(Graphics g) {
         g.drawImage(Images.selectionBackground,0,0,handler.getWidth(),handler.getHeight(),null);
         uiManager.Render(g);
+        g.drawString(String.valueOf(handler.getScoreManager().getGalagaHighScore()),handler.getWidth()/18,32);
     }
 
     @Override
