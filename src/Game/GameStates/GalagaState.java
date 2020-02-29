@@ -57,7 +57,6 @@ public class GalagaState extends State {
                 	handler.getGalagaState().entityManager.entities.add(new EnemyBee(0, 0, 32, 32, handler, i +3, k)); //enemy spawns correctly but it does not spawn automatically without overlapping
                 	//this is to stop the overlapping
                 	beeFilled[i][k]=true;
-                    handler.getGalagaState().entityManager.entities.add(new EnemyBee(0, 0, 32, 32, handler, i +3, k));
                 	}
                 }
             	
