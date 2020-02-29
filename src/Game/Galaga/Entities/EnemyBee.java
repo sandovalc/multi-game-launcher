@@ -135,7 +135,7 @@ public class EnemyBee extends BaseEntity {
                         }
                     }else{
                         positioned =true;
-                        justSpawned = false;
+                        justSpawned = true;
                     }
                 }else{
                     centerCoolDown--;
@@ -147,7 +147,7 @@ public class EnemyBee extends BaseEntity {
                 }
             }
         }else if (positioned){//random cooldown above y cuando pase, grab position and move towards it.
-
+        	timeAlive=0;
         }else if (attacking){//attack towards player and then dies
 
         }
@@ -173,6 +173,7 @@ public class EnemyBee extends BaseEntity {
         super.damage(damageSource);
         if (damageSource instanceof PlayerLaser){
             hit=true;
+            handler.getGalagaState().spawnAgain[col][row]=0;//the  timer for the spawn
             handler.getMusicHandler().playEffect("explosion.wav");
             damageSource.remove = true;
             handler.getScoreManager().addGalagaCurrentScore(100);

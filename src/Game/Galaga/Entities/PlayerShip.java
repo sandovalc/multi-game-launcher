@@ -7,8 +7,8 @@ import Resources.Images;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
+
 
 /**
  * Created by AlexVR on 1/25/2020
@@ -41,20 +41,7 @@ public class PlayerShip extends BaseEntity{
                 destroyedCoolDown--;
             }
         }else {
-        	/**
-        	int maxnum = ThreadLocalRandom.current().nextInt(30,101);
-        	int minnum = ThreadLocalRandom.current().nextInt(2,11);
-        	int bee = ThreadLocalRandom.current().nextInt(0,maxnum);
-        	int row = ThreadLocalRandom.current().nextInt(3,15);
-        	int col = ThreadLocalRandom.current().nextInt(0,10);
-        	ArrayList <Integer> point = new ArrayList<Integer>();
-        	point.add(row);
-        	point.add(col);
-        	boolean check = beePos.contains(point);
-        	if (!check) {
-        		beePos.addAll(point);
-        		handler.getGalagaState().entityManager.entities.add(new EnemyBee(this.x + (width/2), this.y-3,width/2, col, handler, col, col));
-        	}*/
+        	
             if (attacking) {
                 if (attackCooldown <= 0) {
                     attacking = false;
@@ -69,12 +56,23 @@ public class PlayerShip extends BaseEntity{
                 handler.getGalagaState().entityManager.entities.add(new PlayerLaser(this.x + (width / 2), this.y - 3, width / 5, height / 2, Images.galagaPlayerLaser, handler, handler.getGalagaState().entityManager));
 
             }
-            if (handler.getKeyManager().left && x > arena.x +2) {//add bounds
+            if (handler.getKeyManager().left && x > handler.getWidth()/4 +speed) {//add bounds
                 x -= (speed);
             }
-            if (handler.getKeyManager().right && x < arena.x + arena.width -width) {
+            
+            if (handler.getKeyManager().right && x < handler.getWidth()*(.75)-speed-handler.getGalagaState().entityManager.playerShip.width) {
                 x += (speed);
             }
+            /**
+        	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_P)){
+    			
+    			handler.getGalagaState().entityManager.entities.add(new EnemyBee(0, 0, 32, 32, handler,new Random().nextInt(2)+3 ,new Random().nextInt(8)));
+    		}
+                if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_O)){
+    			
+    			handler.getGalagaState().entityManager.entities.add(new EnemyAlien(0, 0, 32, 32, handler,new Random().nextInt(3),new Random().nextInt(8)));
+    		}
+            **/
             if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_N) && handler.DEBUG) {
             	health--;
             	destroyed=true;
@@ -85,7 +83,7 @@ public class PlayerShip extends BaseEntity{
             bounds.x = x;
         
         }
-        if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_L) && handler.DEBUG && health < 3) {
+        if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_L) && health < 3 && handler.DEBUG) {
     		health ++;}
         }
     @Override

@@ -1,5 +1,6 @@
 package Game.GameStates;
 
+import Game.Galaga.Entities.EnemyAlien;
 import Game.Galaga.Entities.EnemyBee;
 import Game.Galaga.Entities.EntityManager;
 import Game.Galaga.Entities.PlayerShip;
@@ -22,7 +23,13 @@ public class GalagaState extends State {
 	public int selectPlayers = 1;
 	public int startCooldown = 60*7;//seven seconds for the music to finish
 	public int tickcounter = 0;
-	public int spawnTime = 0;
+	public int spawnTime = 120;
+	public boolean[][] beeFilled = new boolean [2][8]; //added boolean arrays for spawning enemies in their position. recommendation by Ta's
+	boolean[][] enemyFilled = new boolean [2][4];
+	boolean firstSpawn=true;
+	public Integer spawnAgain[][]= new Integer[8][5]; 
+    boolean spawnAgainCheck=true;
+	
 
 	public GalagaState(Handler handler){
 		super(handler);
@@ -36,22 +43,56 @@ public class GalagaState extends State {
 	public void tick() {
 		
 		tickcounter++;
-		if(tickcounter > 60*2){
+		if(tickcounter > 60*2){  //first prototype... spawned bees from time to time automatically, stopped to prevent overlapping
 			spawnTime++;
 			tickcounter=0;
 		}
 		if(spawnTime >= 1) {
-			Random random = new Random();
-			handler.getGalagaState().entityManager.entities.add(new EnemyBee(0, 0, 32, 32, handler, random.nextInt(8), random.nextInt(6)));
+			Random random = new Random(); //BEE SPAWN
 			spawnTime = 0;
+             for (int i = 0; i < 2; i++) {
+                for(int k =0; k < 8;k++) {
+                	//this if is to check if every row and column is empty
+                	if(beeFilled[i][k]!=true) {
+                	handler.getGalagaState().entityManager.entities.add(new EnemyBee(0, 0, 32, 32, handler, i +3, k)); //enemy spawns correctly but it does not spawn automatically without overlapping
+                	//this is to stop the overlapping
+                	beeFilled[i][k]=true;
+                    handler.getGalagaState().entityManager.entities.add(new EnemyBee(0, 0, 32, 32, handler, i +3, k));
+                	}
+                }
+            	
+             }
+            
+             for (int i = 0; i < 2; i++) {
+                 for(int k =0; k < 4;k++) {
+                 	//this if is to check if every row and column is empty
+                 	if(enemyFilled[i][k]!=true) {
+                 	handler.getGalagaState().entityManager.entities.add(new EnemyAlien(0, 0, 32, 32, handler, i+1 , k+2)); // spawns new enemy
+                 	//this is to stop the overlapping
+                 	enemyFilled[i][k]=true;
+                 	}
+                 }
+             	
+              }
+
+		}
+		
+		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_P) && handler.DEBUG){ //spawns enemy bee, if full. overlaps
+			
+			handler.getGalagaState().entityManager.entities.add(new EnemyBee(0, 0, 32, 32, handler,new Random().nextInt(2)+3 ,new Random().nextInt(8)));
+		}
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_O) && handler.DEBUG){ // spawns enemy alien, if full. overlaps
+			
+			handler.getGalagaState().entityManager.entities.add(new EnemyAlien(0, 0, 32, 32, handler,new Random().nextInt(2)+1,new Random().nextInt()+2));
 		}
 		
 		if (Mode.equals("Stage")){
 			if (startCooldown<=0) {
-				entityManager.tick();
+				entityManager.tick(); 
 			}else{
 				startCooldown--;
 			}
+			
 		}else{
 
 			titleAnimation.tick();
@@ -68,12 +109,15 @@ public class GalagaState extends State {
 
 		}
 
-		if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_1)) {
+		if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_1)) { //goes into debug mode for cheats
 			handler.DEBUG = !handler.DEBUG;
 		}
 
-
+        if(handler.getScoreManager().getGalagaCurrentScore()>handler.getScoreManager().getGalagaHighScore()) {
+       	 handler.getScoreManager().setGalagaHighScore(handler.getScoreManager().getGalagaCurrentScore()); //adds score
 	}
+ 
+}
 
 	@Override
 	public void render(Graphics g) {
@@ -106,7 +150,7 @@ public class GalagaState extends State {
 				g.setColor(Color.GREEN);
 				break;
 			case 4:
-				g.setColor(Color.MAGENTA);
+				g.setColor(Color.MAGENTA); //added colors
 				break;
 			case 5:
 				g.setColor(Color.WHITE);
@@ -124,12 +168,12 @@ public class GalagaState extends State {
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 62));
 			g.drawString("HIGH",handler.getWidth()-handler.getWidth()/4,handler.getHeight()/16);
 			g.drawString("SCORE",handler.getWidth()-handler.getWidth()/4+handler.getWidth()/48,handler.getHeight()/8);
-			g.setColor(Color.WHITE);
+			g.setColor(Color.WHITE);//added score
 			g.drawString(String.valueOf(handler.getScoreManager().getGalagaHighScore()),handler.getWidth()-handler.getWidth()/4+handler.getWidth()/48,handler.getHeight()/5);
 			
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 32));
 			g.setColor(Color.WHITE);
-			g.drawString("HIGH-SCORE:",handler.getWidth()/2-handler.getWidth()/18,32);
+			g.drawString("SCORE:",handler.getWidth()/2-handler.getWidth()/18,32);
 			g.drawString(String.valueOf(handler.getScoreManager().getGalagaHighScore()),handler.getWidth()/2-32,64);
 			
 			for (int i = 0; i< entityManager.playerShip.getHealth();i++) {
@@ -147,9 +191,10 @@ public class GalagaState extends State {
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 32));
 
 			g.setColor(Color.MAGENTA);
-			g.drawString("HIGH-SCORE:",handler.getWidth()/2-handler.getWidth()/18,32);
+			g.drawString("SCORE:",handler.getWidth()/2-handler.getWidth()/18,32);
 
 			g.setColor(Color.WHITE);
+			
 			g.drawString(String.valueOf(handler.getScoreManager().getGalagaHighScore()),handler.getWidth()/2-32,64);
 
 			g.drawImage(titleAnimation.getCurrentFrame(),handler.getWidth()/2-(handler.getWidth()/12),handler.getHeight()/2-handler.getHeight()/3,handler.getWidth()/6,handler.getHeight()/7,null);
@@ -164,16 +209,61 @@ public class GalagaState extends State {
 			}else{
 				g.drawImage(Images.galagaSelect,handler.getWidth()/2-handler.getWidth()/12,handler.getHeight()/2+handler.getHeight()/18,32,32,null);
 			}
+			 
+   
 
-
-
-		}
+		}            
 	}
-
+ public void firstSpawn() { //first spawn
+	 for(int i =0; i<8; i++) {
+		 for(int k=0;k<5;k++) {
+			 if(k>=3) {
+				 handler.getGalagaState().entityManager.entities.add(new EnemyBee(0,0,32,32,handler,k,i));
+			 }else {
+				 handler.getGalagaState().entityManager.entities.add(new EnemyAlien(0,0,32,32,handler,k,i));
+			 }
+		 }
+	 }
+	  }
+	 
+	 public void spawnAgainCheck() { //checks if enemy spawned. for random spawn after death
+		 for (int i =0; i<8;i++) {
+			 for(int k=0;k<5;k++) {
+				 if(spawnAgain[i][k] != null) {
+					 if(spawnAgain[i][k] >= 60*(new Random().nextInt(4)+5)) {
+						 spawnAgain[i][k]=null;
+						 if(k>=3) {
+							 handler.getGalagaState().entityManager.entities.add(new EnemyBee(0,0,32,32,handler,k,i));
+						 }else {
+							 handler.getGalagaState().entityManager.entities.add(new EnemyAlien(0,0,32,32,handler,k,i));
+							 
+						 }
+					 }else { 
+						 spawnAgain[i][k]++;
+					 }
+				 }
+			 }
+		 }
+	 
+	 
+	 
+	 
+	 
+	 
+ }
+	
+	
 	@Override
 	public void refresh() {
 
-
-
 	}
+	
+	
+	
+	              
+	
+	
+	
+	
+	
 }

@@ -50,6 +50,9 @@ public class BaseEntity {
     }
 
     public void damage(BaseEntity damageSource) {
+    	
+    	
+    	
     }
 
 }

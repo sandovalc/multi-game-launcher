@@ -8,8 +8,11 @@ import java.util.ArrayList;
  */
 public class EntityManager {
 
-    public ArrayList<BaseEntity> entities;
+    
+	public ArrayList<BaseEntity> entities;
     public PlayerShip playerShip;
+	public ArrayList<BaseEntity>Add = new ArrayList<>();
+    
 
     public EntityManager(PlayerShip playerShip) {
         entities = new ArrayList<>();
@@ -32,7 +35,10 @@ public class EntityManager {
         for (BaseEntity toErase:toRemove){
             entities.remove(toErase);
         }
-
+        for (BaseEntity toAdd: Add){
+            entities.add(toAdd);
+        }
+        Add.clear();
     }
 
     public void render(Graphics g){
@@ -42,5 +48,10 @@ public class EntityManager {
         playerShip.render(g);
 
     }
+
+	public void add(AlienLaser playEffect) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

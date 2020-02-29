@@ -19,7 +19,7 @@ public class Handler {
 
     private GameSetUp game;
     private DisplayScreen screen;
-    private ScoreManager scoreManager;
+    public ScoreManager scoreManager;
     private boolean fullScreen = false,mute=false;
     private Clip backgroundMusic;
     private MusicHandler musicHandler;
