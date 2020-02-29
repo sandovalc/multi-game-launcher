@@ -63,17 +63,8 @@ public class PlayerShip extends BaseEntity{
             if (handler.getKeyManager().right && x < handler.getWidth()*(.75)-speed-handler.getGalagaState().entityManager.playerShip.width) {
                 x += (speed);
             }
-            /**
-        	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_P)){
-    			
-    			handler.getGalagaState().entityManager.entities.add(new EnemyBee(0, 0, 32, 32, handler,new Random().nextInt(2)+3 ,new Random().nextInt(8)));
-    		}
-                if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_O)){
-    			
-    			handler.getGalagaState().entityManager.entities.add(new EnemyAlien(0, 0, 32, 32, handler,new Random().nextInt(3),new Random().nextInt(8)));
-    		}
-            **/
-            if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_N) && handler.DEBUG) {
+            
+            if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_N) && handler.DEBUG) { //suicide 
             	health--;
             	destroyed=true;
             	handler.getMusicHandler().playEffect("explosion.wav");
@@ -83,7 +74,7 @@ public class PlayerShip extends BaseEntity{
             bounds.x = x;
         
         }
-        if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_L) && health < 3 && handler.DEBUG) {
+        if (handler.getKeyManager().keyJustPressed(KeyEvent.VK_L) && health < 3 && handler.DEBUG) { //adds life one by one
     		health ++;}
         }
     @Override
@@ -104,14 +95,14 @@ public class PlayerShip extends BaseEntity{
         if (damageSource instanceof PlayerLaser){
             return;
         }
-        health--;
+        health--; //substracts health 
         destroyed = true;
         handler.getMusicHandler().playEffect("explosion.wav");
     }
     
     
     public int getHealth() {
-    	if (health < 1)
+    	if (health < 1) //when players run out of lifes, score turns 0 until it receives another life
     		handler.getScoreManager().removeGalagaCurrentScore(handler.getScoreManager().getGalagaCurrentScore()+100);
         	return health;
     }

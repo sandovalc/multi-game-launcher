@@ -14,7 +14,7 @@ public class EnemyAlien extends BaseEntity {
 	int spawnPos;//0 is left 1 is top, 2 is right, 3 is bottom
 	int formationX,formationY,speed,centerCoolDown=60;
 	int timeAlive=0;
-	private int attackCoolDown = 10, positionCoolDown=10;
+	private int attackCoolDown = 10, positionCoolDown=10; //added values for laser utility
 
 	public EnemyAlien(int x, int y, int width, int height, Handler handler,int row, int col) {
 		super(x, y, width, height, Images.galagaEnemyBee[0], handler);
@@ -32,7 +32,7 @@ public class EnemyAlien extends BaseEntity {
 	}
 
 	private void spawn() {
-		spawnPos = random.nextInt(3);
+		spawnPos = random.nextInt(3); //changed value to 3 to prevent enemies from spawning below the player
 		switch (spawnPos){
 		case 0://left
 			x = (handler.getWidth()/4)-width;
@@ -147,22 +147,24 @@ public class EnemyAlien extends BaseEntity {
 					damage(new PlayerLaser(0,0,0,0,Images.galagaPlayerLaser,handler,handler.getGalagaState().entityManager));
 				}
 			}
-		}else if (positioned && attacking){
+		}else if (positioned && attacking){   //LASER
 			if (positionCoolDown > 0) {
 				positionCoolDown = 60 * 20;
 				attacking = true;//laser entity ready to be shot
 				handler.getGalagaState().entityManager.entities.add(new AlienLaser(this.x + (width/2), this.y-3, width/5, height/2, Images.galagaPlayerLaser,handler, handler.getGalagaState().entityManager));
-				handler.getMusicHandler().playEffect("laser.wav");
+				handler.getMusicHandler().playEffect("laser.wav"); //laser sound
 				positionCoolDown--;
 			}
 		}else {
 			if (attackCoolDown <= 0){
 				handler.getMusicHandler().playEffect("laser.wav");
-				attackCoolDown = 120; //
+				attackCoolDown = 120; // attack cooldown
 				handler.getGalagaState().entityManager.entities.add(new AlienLaser(this.x + (width/2), this.y-3, width/5, height/2, Images.galagaPlayerLaser,handler, handler.getGalagaState().entityManager));
 			}
 				else {
 					attackCoolDown--;//substract
+					
+					//LASER was bugged and now it stopped working
 			}
 		}
 	bounds.x=x;
@@ -189,12 +191,12 @@ public void damage(BaseEntity damageSource) {
 	super.damage(damageSource);
 	if (damageSource instanceof PlayerLaser){
 		hit=true;
-		handler.getGalagaState().spawnAgain[col][row]=2;
+		handler.getGalagaState().spawnAgain[col][row]=0;
 		handler.getMusicHandler().playEffect("explosion.wav");
 		damageSource.remove = true;
-		handler.getScoreManager().addGalagaCurrentScore(100);
+		handler.getScoreManager().addGalagaCurrentScore(100); //adds score
 		handler.getScoreManager().setGalagaCurrentScore(handler.getScoreManager().getGalagaCurrentScore());
-		handler.getScoreManager().setGalagaHighScore(handler.getScoreManager().getGalagaCurrentScore());	
+		handler.getScoreManager().setGalagaHighScore(handler.getScoreManager().getGalagaCurrentScore());	//adds score to the high score
 	}
 
 }
